@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+</head>
+<body>
+    <div style="width: 50%; margin: auto;">
+        
+        <%- include('./composants/header') %>
+        
+        <section>
+            <form action="/notes" method="post">
+                <input type="hidden" name="id" id="id">
+                <label for="titre">Titre</label><br>
+                <input type="text" id="titre" name="titre"><br>
+                <label for="description">Description</label><br>
+                <textarea name="description" id="description" cols="20" rows="5"></textarea>
+                <br>
+                <input type="submit" value="Enregistrer" onclick="">
+            </form>
+            <p>------------------------------------------------------</p>
+        </section>
+
+        <section>
+            <h2>Liste des notes</h2>
+
+            <% for(i=0; i<resultat.length; i++) { %>
+
+                <h3><%= resultat[i].titre %></h3>
+                <p><%= resultat[i].description %></p>
+
+                <input type="button" value="Supprimer" onclick="supprimer('<%= resultat[i].id %>')">
+                <input type="button" value="Modifier" onclick="remplirDonnees('<%= resultat[i].id %>','<%= resultat[i].titre %>', '<%= resultat[i].description %>' )">
+
+            <% } %>
+   
+        </section>
+    </div>
+</body>
+
+<script>
+    function remplirDonnees(id, titre, desc) {
+        document.getElementById('id').value = id;
+        document.getElementById('titre').value = titre;
+        document.getElementById('description').value = desc;
+    }
+
+    function supprimer(id) {
+
+        let pointFinal = "notes/" + id
+        fetch(
+            pointFinal, {method : "DELETE"}
+        ).then(
+            (reponse)=> reponse.json()
+        ).then(
+            (donnee)=> window.location.href = donnee.routeRacine
+        ).catch((erreur)=> console.log(erreur))
+        
+    }
+</script>
+
+</html>
